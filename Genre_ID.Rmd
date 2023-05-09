@@ -1,0 +1,137 @@
+---
+title: "Genre_ID"
+author: "Group 5"
+date: '2023-05-03'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library('tidyverse')
+library("rjson")
+library('stringr')
+
+
+
+
+```
+
+```{r}
+data <- read.csv('Datasets/FinalClean.csv')
+data
+
+
+
+```
+
+```{r}
+genres <- toJSON(data$genres)
+
+
+```
+
+```{r}
+write(genres, "Dataset_genre.json")
+
+```
+
+```{r}
+genre <- fromJSON(file = 'Dataset_genre.json') %>% as.data.frame()
+```
+
+```{r}
+#\{'id': (\d+), 'name': '(\w+)'\}
+
+
+
+
+
+
+pattern <- "'id':\\s*(\\d+),\\s*'name':\\s*'([^']*)'"
+
+
+df <- data.frame(ID = character(),
+                 Name = character())
+
+for (i in 1:nrow(genre)) {
+    if(genre[i,] != '[]' && length(str_match_all(genre[i,],pattern)[[1]]) != 0){
+      
+      
+      
+      values <- str_match_all(genre[i,],pattern)
+      len <- length(values[[1]][,1])
+      for(j in 1:len){
+        id <- values[[1]][j,2]
+        name <- values[[1]][j,3]
+        
+        
+        df <- df %>% rbind(list(ID = id,
+                          Name = name)
+                     )
+      }
+    }
+  
+}
+
+genres_List <- df$Name %>% unique()
+
+
+
+saveRDS(genres_List, "genres_List.rds")
+
+
+
+id <- values[[1]][i,2]
+name <- values[[1]][i,3]
+
+
+
+```
+
+```{r}
+genre_List <- readRDS("genres_List.rds")
+
+
+
+all_encodings <- list()
+for (i in 1:20) {
+    if(genre[i,] != '[]' && length(str_match_all(genre[i,],pattern)[[1]]) != 0){
+      
+      values <- str_match_all(genre[i,],pattern)
+      len <- length(values[[1]][,1])
+      
+      current_genres <- list
+      for(j in 1:len){
+        #id <- values[[1]][j,2]
+        name <- values[[1]][j,3]
+        
+        encoding <- which(genre_List == name) - 1
+        current_genres[[j]] = encoding
+      }
+      all_encodings[[i]] = current_genres
+    }
+  
+}
+
+
+
+
+
+
+
+
+index <- which(genre_List == "Comedy") - 1
+
+
+
+
+
+
+
+
+
+```
+
+
+
+
+

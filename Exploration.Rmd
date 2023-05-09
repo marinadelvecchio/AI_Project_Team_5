@@ -1,0 +1,18 @@
+---
+title: "exploration"
+author: "Group 5"
+date: '2023-05-07'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+data <- read.csv('Datasets/FinalClean.csv')
+
+
+
+
+
+```
+
+
